@@ -26,8 +26,6 @@ test('Browser Context Playwright test', async ({browser})=> {
         signIn.click()
     ]);
     
-    //console.log(await cardTitles.first().textContent());
-    //console.log(await cardTitles.nth(1).textContent());
     const allTitles = await cardTitles.allTextContents();
     console.log(allTitles);
 });
