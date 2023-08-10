@@ -1,10 +1,24 @@
-const {test, expect} = require('@playwright/test');
+const {test, expect, request} = require('@playwright/test');
+let webContext;
 
-test('Client App login', async ({page})=> {
+test.beforeAll(async({browser})=>{
+    const context = await browser.newContext();
+    const page = await context.newPage();
+    await page.goto("https://rahulshettyacademy.com/client");
+    await page.locator("#userEmail").fill("jaimettb@gmail.com");
+    await page.locator("#userPassword").fill("Ab@123@123");
+    await page.locator("[value='Login']").click();
+    await page.waitForLoadState('networkidle');
+    await context.storageState({path:'state.json'});
+    webContext = await browser.newContext({storageState:'state.json'});
+});
+
+test('Client App login', async ()=> {
     const email = 'jaimettb@gmail.com';
     const productName = 'zara coat 3';
-    const products = page.locator(".card-body");
+    const page = await webContext.newPage();
     await page.goto("https://rahulshettyacademy.com/client");
+    const products = page.locator(".card-body");
     await page.locator("#userEmail").fill("jaimettb@gmail.com");
     await page.locator("#userPassword").fill("Ab@123@123");
     await page.locator("[value='Login']").click();
@@ -60,4 +74,14 @@ test('Client App login', async ({page})=> {
 
     const orderIdDetails = await page.locator(".col-text").textContent();
     expect(orderId.includes(orderIdDetails)).toBeTruthy();
+});
+
+test('Test case 2', async ()=> {
+    const email = '';
+    const productName = 'zara coat 3';
+    const page = await webContext.newPage();
+    await page.goto("https://rahulshettyacademy.com/client");
+    const products = page.locator(".card-body");
+    const titles = await page.locator(".card-body b").allTextContents();
+    console.log(titles);
 });
