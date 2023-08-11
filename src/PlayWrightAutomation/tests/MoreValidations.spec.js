@@ -24,7 +24,7 @@ test("Screenshot & Visual comparison", async({page})=>{
 });
 
 
-test.only("visual", async({page})=>{
+test("visual", async({page})=>{
     await page.goto("https://google.com/");
     await expect (await page.screenshot()).toMatchSnapshot('landing.png');
 });
